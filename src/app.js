@@ -7,8 +7,6 @@ import { Provider } from "react-redux";
 import AppRouter from "./routers/AppRouter";
 import configureStore from "./store/configureStore";
 import { addExpense } from "./actions/expenses";
-import { setTextFilter } from "./actions/filters";
-import getVisibleExpenses from "./selectors/expenses";
 
 const store = configureStore();
 
@@ -25,19 +23,6 @@ store.dispatch(
   addExpense({ description: "Rent", amount: 10950, createdAt: 900 })
 );
 console.log(store.getState());
-
-//setTextFilter -> bill(2 items) -> water(1 item)
-/*
-store.dispatch(setTextFilter("water"));
-setTimeout(() => {
-  store.dispatch(setTextFilter("bill"));
-}, 3000);
-*/
-
-//getVisibleExpenses -> print visible ones to screen
-const state = store.getState();
-const visibleExpenses = getVisibleExpenses(state.expenses, state.filters);
-console.log(visibleExpenses);
 
 const jsx = (
   <Provider store={store}>
