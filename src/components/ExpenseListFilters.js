@@ -33,7 +33,7 @@ class ExpenseListFilters extends React.Component {
         <select
           value={this.props.filters.sortBy} //Controlled Input
           onChange={e => {
-            if (e.target.value === "date") props.dispatch(sortByDate());
+            if (e.target.value === "date") this.props.dispatch(sortByDate());
             else this.props.dispatch(sortByAmount());
           }}
         >
