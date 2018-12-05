@@ -47,3 +47,31 @@ export const editExpense = (id, updates) => ({
   id,
   updates
 });
+
+//SET EXPENSES Action generator
+export const setExpenses = expenses => ({
+  type: "SET_EXPENSE",
+  expenses
+});
+
+//export const startSetExpenses
+//1. Fetch all expense data once
+//2. Parse data into an array
+//3. Dispatch SET_EXPENSES
+export const startSetExpenses = () => {
+  return dispatch => {
+    return database
+      .ref("expenses")
+      .once("value")
+      .then(snapshot => {
+        const expenses = [];
+        snapshot.forEach(childSnapshot => {
+          expenses.push({
+            id: childSnapshot.key,
+            ...childSnapshot.val()
+          });
+        });
+        dispatch(setExpenses(expenses));
+      });
+  };
+};
