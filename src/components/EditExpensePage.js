@@ -1,34 +1,29 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { editExpense, removeExpense } from "../actions/expenses";
+import { editExpense, startRemoveExpense } from "../actions/expenses";
 import ExpenseForm from "./ExpenseForm";
 
-const EditExpensePage = props => {
-  return (
-    <div>
-      <ExpenseForm
-        expense={props.expense}
-        onSubmit={expense => {
-          //Dispatch the action to edit the expense
-          //Redirect to dashboard page
-          props.dispatch(editExpense(props.expense.id, expense));
-          props.history.push("/");
-          console.log("updated", expense);
-        }}
-      />
-      <button
-        onClick={() => {
-          //Dispatch the action to edit the expense
-          //Redirect to dashboard page
-          props.dispatch(removeExpense({ id: props.expense.id }));
-          props.history.push("/");
-        }}
-      >
-        Remove
-      </button>
-    </div>
-  );
-};
+export class EditExpensePage extends React.Component {
+  onSubmit = expense => {
+    //Dispatch the action to edit the expense
+    //Redirect to dashboard page
+    this.props.dispatch(editExpense(this.props.expense.id, expense));
+    this.props.history.push("/");
+    console.log("updated", expense);
+  };
+  onRemove = () => {
+    this.props.dispatch(startRemoveExpense({ id: this.props.expense.id }));
+    this.props.history.push("/");
+  };
+  render() {
+    return (
+      <div>
+        <ExpenseForm expense={this.props.expense} onSubmit={this.onSubmit} />
+        <button onClick={this.onRemove}>Remove</button>
+      </div>
+    );
+  }
+}
 
 const mapStateToProps = (state, props) => {
   return {
@@ -38,4 +33,12 @@ const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps)(EditExpensePage);
+const mapDispatchToProps = (dispatch, props) => {
+  editExpense: (id, expense) => dispatch(editExpense(id, expense));
+  startRemoveExpense: data => dispatch(startRemoveExpense(data));
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EditExpensePage);
